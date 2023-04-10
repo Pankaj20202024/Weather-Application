@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alkatra&display=swap" rel="stylesheet">
+    <title>Weather App</title>
+    <%- include('search') -%>
+    <style>
+        
+
+        /* css for weather container  */
+
+        #weatherContainers {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .weatherContainers::-webkit-scrollbar {
+            -webkit-appearance: none;
+        }
+
+        #box {
+            margin: 9px;
+            padding: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.2rem 3rem rgba(0, 0, 0, 0.2);
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            width: 300px;
+        }
+
+        .wave {
+            opacity: 0.4;
+            position: absolute;
+            top: 45%;
+            left: 110%;
+            background-color: #09e3f7;
+            width: 25rem;
+            height: 25rem;
+            margin-left: -25rem;
+            transform-origin: 50% 48%;
+            border-radius: 45%;
+            animation: drift 3000ms infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes drift {
+            from {
+                transform: rotate(0deg);
+            }
+
+            from {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* writing css of inner content  of the boxes */
+
+        #weathercon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5em;
+            padding: 4px;
+            margin: 4px;
+        }
+
+        .info {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            height: 45%;
+        }
+
+        .fa-street-view {
+            padding: 1px;
+            margin: 5px;
+            font-size: 2rem;
+        }
+
+        .location {
+            margin-top: 1.1rem;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        #date {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: #57606f;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .temp {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .tempmin_max {
+            text-align: center;
+            margin-top: 0.3rem;
+            font-weight: 300;
+            font-size: 1.2rem;
+            color: #57606f;
+        }
+    </style>
+</head>
+
+<body>
+   
+    
+        <div id="weatherContainers">
+            <div id="box">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div id="weathercon">
+                    <i class="fa-solid fa-sun fa-beat-fade" style="color:#fcba03;"></i>
+                </div>
+                <div class="info">
+                    <h2 class="location"><i class="fa-solid fa-street-view fa-bounce"
+                            style="color:#FFF;"></i>
+                            <%= weather.city %>,
+                            <%= weather.country %></h2>
+                    <p id="date"> WED | OCT 23 | 10.45 AM</p>
+                    <h1 class="temp"><%= weather.temper %>°C</h1>
+                    <h3 class="tempmin_max"> Min <%= weather.tempmin %>°C | Max <%= weather.tempmax %>°C</h3>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+
+    <script>
+
+        var weekday = new Array(7);
+        weekday[0] = "Sun";
+        weekday[1] = "Mon";
+        weekday[2] = "Tue";
+        weekday[3] = "Wed";
+        weekday[4] = "Thr";
+        weekday[5] = "Fri";
+        weekday[6] = "Sat";
+
+
+        const tempStatus = "<%= weather.tempstatus %>"
+
+        if (tempStatus == "Sunny") {
+            weathercon.innerHTML = "<i class='fa-solid fa-sun fa-beat-fade' style='color:#eccc68;'></i>"
+        }
+        else if (tempStatus == "Clouds") {
+
+            weathercon.innerHTML = "<i class='fa-solid fa-cloud fa-beat-fade' style='color:#62d0f5;'></i>"
+        }
+        else if (tempStatus == "Rainy") {
+            weathercon.innerHTML = "<i class='fa-solid fa-cloud-rain fa-beat-fade' style='color:#a4b0be;'></i>"
+        }
+        else if (tempStatus == "Clear") {
+            weathercon.innerHTML = "<i class='fa-solid fa-cloud-sun fa-beat-fade' style='color:#62d0f5;'></i>"
+        }
+        else {
+            weathercon.innerHTML = "<i class='fa-solid fa-cloud fa-beat-fade' style='color:#a44c3de;'></i>"
+        }
+
+
+        const getCurrentDay = () => {
+            let currentTime = new Date();
+            let day = weekday[currentTime.getDay()];
+            return day;
+        }
+        const getCurrentTime = () => {
+            var months = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "June",
+                "July",
+                "Aug",
+                "Sept",
+                "Oct",
+                "Nov",
+                "Dec"
+            ];
+
+            let now = new Date();
+            var month = months[now.getMonth() + 1];
+            var day = now.getDate();
+            var hours = now.getHours();
+            var mins = now.getMinutes();
+            let period = "AM"
+            if (hours > 11) {
+                period = "PM";
+                if (hours > 12) {
+                    hours -= 12;
+                }
+            }
+            if (mins < 10) {
+                mins = "0" + mins;
+            }
+            return `${month} ${day} | ${hours}:${mins}${period}`;
+        }
+        curDate.innerHTML = getCurrentDay() + " | " + getCurrentTime()
+
+    </script>
+     
+</body>
+
+</html>
